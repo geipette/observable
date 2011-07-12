@@ -3,8 +3,8 @@ package no.guttab.observable.core.aspects;
 import no.guttab.observable.core.PropertyChange;
 import no.guttab.observable.core.Subject;
 import no.guttab.observable.core.SubjectImpl;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.DeclareParents;
 import org.aspectj.lang.annotation.Pointcut;
@@ -45,14 +45,13 @@ public class ObservableAspect {
 //   }
 
    @SuppressWarnings({"unchecked"})
-   @Around(value = "notifySetProperty() && " +
-         "this(subject)", argNames = "pjp,subject")
-   public void notifyChangeAdvice(ProceedingJoinPoint pjp, Subject subject) throws Throwable {
-      if (pjp.getArgs().length == 1) {
-         final String propertyName = getPropertyName(pjp.getSignature().getName());
-         final Object arg = pjp.getArgs()[0];
+   @After(value = "notifySetProperty() && " +
+         "this(subject)", argNames = "jp, subject")
+   public void notifyChangeAdvice(JoinPoint jp, Subject subject) throws Throwable {
+      if (jp.getArgs().length == 1) {
+         final String propertyName = getPropertyName(jp.getSignature().getName());
+         final Object arg = jp.getArgs()[0];
          log.debug("Property '{}' was set to '{}'", propertyName, arg);
-         pjp.proceed();
          subject.notifyListeners(new PropertyChange(propertyName, arg));
       }
    }
