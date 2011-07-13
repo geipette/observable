@@ -1,10 +1,10 @@
 package no.guttab.observable.core;
 
-public class PropertyChange<T> {
+public class PropertyChange {
    private String name;
-   private T property;
+   private Object property;
 
-   public PropertyChange(String name, T property) {
+   public PropertyChange(String name, Object property) {
       this.name = name;
       setProperty(property);
    }
@@ -17,11 +17,11 @@ public class PropertyChange<T> {
       this.name = name;
    }
 
-   public T getProperty() {
+   public Object getProperty() {
       return property;
    }
 
-   public void setProperty(T property) {
+   public void setProperty(Object property) {
       this.property = property;
    }
 

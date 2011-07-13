@@ -5,7 +5,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class SubjectImpl implements Subject {
    private final List<PropertyChangeListener> listeners = new CopyOnWriteArrayList<PropertyChangeListener>();
-   private Object target;
 
    @Override
    public void addListener(PropertyChangeListener listener) {
@@ -30,15 +29,5 @@ public class SubjectImpl implements Subject {
    public void deleteAllListeners() {
       listeners.clear();
    }
-
-//   @Override
-//   public void initTarget(Object target) {
-//      this.target = target;
-//   }
-//
-//   @Override
-//   public Object target() {
-//      return target;
-//   }
 
 }

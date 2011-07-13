@@ -1,30 +1,82 @@
 package no.guttab.observable.core.aspects;
 
+import java.util.List;
+
 import no.guttab.observable.core.PropertyChange;
 import no.guttab.observable.core.Subject;
 import no.guttab.observable.core.SubjectImpl;
+import no.guttab.observable.core.collections.ObservableCollections;
+import no.guttab.observable.core.collections.ObservableList;
+import no.guttab.observable.core.listeners.SubjectListListener;
+import no.guttab.observable.core.listeners.SubjectListener;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.DeclareParents;
+import org.aspectj.lang.annotation.DeclareMixin;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static java.util.Locale.ENGLISH;
 
 @Aspect
 public class ObservableAspect {
    private static final Logger log = LoggerFactory.getLogger(ObservableAspect.class);
 
-   @DeclareParents(value = "(@no.guttab.observable.core.annotation.ObservableBean *)",
-         defaultImpl = SubjectImpl.class)
-   private Subject subjectMixin;
-
-   @Pointcut("execution(public void set*(..)) && " +
-         "@target(no.guttab.observable.core.annotation.ObservableBean)")
-   void notifySetProperty() {
+   @DeclareMixin("(@no.guttab.observable.core.annotation.Observable *)")
+   public static Subject createSubjectImplementationForObservable() {
+      return new SubjectImpl();
    }
+
+   @Pointcut("set(!transient * *) && " +
+         "@target(no.guttab.observable.core.annotation.Observable)")
+   void setFieldOnObservable() {
+   }
+
+   @Pointcut("set(!transient (@no.guttab.observable.core.annotation.Observable *) *) && " +
+         "@target(no.guttab.observable.core.annotation.Observable)")
+   void setObservedFieldOnObservable() {
+   }
+
+   @Pointcut("set(!transient java.util.List *) && " +
+         "@target(no.guttab.observable.core.annotation.Observable)")
+   void setListFieldObservable() {
+   }
+
+   @After(value = "setFieldOnObservable() && " +
+         "this(subject)", argNames = "jp, subject")
+   public void setFieldOnObservableAdvice(JoinPoint jp, Subject subject) throws Throwable {
+      if (jp.getArgs().length == 1) {
+         final String propertyName = jp.getSignature().getName();
+         final Object arg = jp.getArgs()[0];
+         log.debug("Field '{}' was set to '{}'", propertyName, arg);
+         subject.notifyListeners(new PropertyChange(propertyName, arg));
+      }
+   }
+
+   @After(value = "setObservedFieldOnObservable() && " +
+         "this(subject)", argNames = "jp, subject")
+   public void setObservedFieldOnObservableAdvice(JoinPoint jp, Subject subject) throws Throwable {
+      if (jp.getArgs().length == 1) {
+         final String propertyName = jp.getSignature().getName();
+         final Subject arg = (Subject) jp.getArgs()[0];
+         log.debug("ObservedField '{}' was set to '{}'", propertyName, arg);
+         arg.addListener(new SubjectListener(propertyName, subject));
+         subject.notifyListeners(new PropertyChange(propertyName, arg));
+      }
+   }
+
+   @SuppressWarnings({"unchecked"})
+   @Around(value = "setListFieldObservable() && " +
+         "this(subject)", argNames = "pjp,subject")
+   public List wrapList(ProceedingJoinPoint pjp, Subject subject) throws Throwable {
+      log.debug("Observable list accessed: {}", pjp.getSignature().toLongString());
+      final String propertyName = pjp.getSignature().getName();
+      final ObservableList observableList = ObservableCollections.observableList(propertyName, (List) pjp.proceed());
+      observableList.addObservableListListener(new SubjectListListener(subject));
+      return observableList;
+   }
+
 
 //   @Pointcut("execution(public java.util.List get*(..)) && " +
 //         "@target(no.guttab.boardgame.smallworld.observable.annotation.ObservableBean) && " +
@@ -43,19 +95,7 @@ public class ObservableAspect {
 //         "@annotation(no.guttab.boardgame.smallworld.observable.annotation.ObservableCollection)")
 //   void notifyGetSet() {
 //   }
-
-   @SuppressWarnings({"unchecked"})
-   @After(value = "notifySetProperty() && " +
-         "this(subject)", argNames = "jp, subject")
-   public void notifyChangeAdvice(JoinPoint jp, Subject subject) throws Throwable {
-      if (jp.getArgs().length == 1) {
-         final String propertyName = getPropertyName(jp.getSignature().getName());
-         final Object arg = jp.getArgs()[0];
-         log.debug("Property '{}' was set to '{}'", propertyName, arg);
-         subject.notifyListeners(new PropertyChange(propertyName, arg));
-      }
-   }
-
+//
 //   @SuppressWarnings({"unchecked"})
 //   @Around(value = "notifyGetList() && " +
 //         "@annotation(no.guttab.boardgame.smallworld.observable.annotation.ObservableCollection) && " +
@@ -91,21 +131,5 @@ public class ObservableAspect {
 //      observableSet.addObservableSetListener(new SubjectSetListener(subject));
 //      return observableSet;
 //   }
-
-
-   private static String getPropertyName(String signatureName) {
-      if (signatureName.startsWith("is")) {
-         return deCapitalize(signatureName.substring(2));
-      } else if (signatureName.startsWith("get") || signatureName.startsWith("set")) {
-         return deCapitalize(signatureName.substring(3));
-      } else {
-         throw new IllegalArgumentException(signatureName + " is not a property read or write method");
-      }
-   }
-
-   private static String deCapitalize(String s) {
-      return s.substring(0, 1).toLowerCase(ENGLISH) + s.substring(1);
-   }
-
 
 }
