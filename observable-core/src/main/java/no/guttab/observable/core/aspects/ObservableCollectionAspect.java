@@ -30,7 +30,7 @@ public class ObservableCollectionAspect {
       final String propertyName = pjp.getSignature().getName();
       List list = (List) pjp.proceed(new Object[]{subject});
       if (list != null) {
-         ObservableList observableList = ObservableCollections.observableList(propertyName, list);
+         final ObservableList observableList = ObservableCollections.observableList(propertyName, list);
          observableList.addObservableListListener(new SubjectListListener(subject));
          return observableList;
       }
