@@ -6,13 +6,13 @@ import no.guttab.observable.core.PropertyChange;
 
 
 /**
- * Notification types from an {@code ObservableList}.
+ * Notification types from an <tt>ObservableList</tt>.
  */
 public interface ObservableListListener<T> {
    /**
     * Notification that elements have been added to the list.
     *
-    * @param list   the {@code ObservableList} that has changed
+    * @param list   the <tt>ObservableList</tt> that has changed
     * @param index  the index the elements were added to
     * @param length the number of elements that were added
     */
@@ -21,7 +21,7 @@ public interface ObservableListListener<T> {
    /**
     * Notification that elements have been removed from the list.
     *
-    * @param list        the {@code ObservableList} that has changed
+    * @param list        the <tt>ObservableList</tt> that has changed
     * @param index       the starting index the elements were removed from
     * @param oldElements a list containing the elements that were removed.
     */
@@ -31,7 +31,7 @@ public interface ObservableListListener<T> {
    /**
     * Notification that an element has been replaced by another in the list.
     *
-    * @param list       the {@code ObservableList} that has changed
+    * @param list       the <tt>ObservableList</tt> that has changed
     * @param index      the index of the element that was replaced
     * @param oldElement the element at the index before the change
     */
@@ -41,7 +41,7 @@ public interface ObservableListListener<T> {
    /**
     * Notification than a property of an element in this list has changed.
     *
-    * @param list  the {@code ObservableList} that has changed
+    * @param list  the <tt>ObservableList</tt> that has changed
     * @param index the index of the element that changed
     */
    public void listElementPropertyChanged(ObservableList<T> list, int index, PropertyChange propertyChange);

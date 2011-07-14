@@ -146,4 +146,9 @@ final class ObservableListImpl<E> extends AbstractList<E> implements ObservableL
          }
       }
    }
+
+   @Override
+   public String toString() {
+      return "ObservableListImpl" + super.toString();
+   }
 }

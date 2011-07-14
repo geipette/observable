@@ -9,7 +9,7 @@ public interface ObservableMapListener<K, V> {
    /**
     * Notification that the value of an existing key has changed.
     *
-    * @param map       the {@code ObservableMap} that changed
+    * @param map       the <tt>ObservableMap</tt> that changed
     * @param key       the key
     * @param lastValue the previous value
     */
@@ -19,7 +19,7 @@ public interface ObservableMapListener<K, V> {
    /**
     * Notification that a key has been added.
     *
-    * @param map the {@code ObservableMap} that changed
+    * @param map the <tt>ObservableMap</tt> that changed
     * @param key the key
     */
    public void mapKeyAdded(ObservableMap<K, V> map, K key);
@@ -27,7 +27,7 @@ public interface ObservableMapListener<K, V> {
    /**
     * Notification that a key has been removed
     *
-    * @param map   the {@code ObservableMap} that changed
+    * @param map   the <tt>ObservableMap</tt> that changed
     * @param key   the key
     * @param value value for key before key was removed
     */

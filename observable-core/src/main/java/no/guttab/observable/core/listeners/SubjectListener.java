@@ -15,7 +15,7 @@ public class SubjectListener implements PropertyChangeListener {
 
    @Override
    public void notifyChange(PropertyChange change) {
-      final PropertyChange adaptedChange = new PropertyChange(propertyName + "." + change.getName(), change.getProperty());
+      final PropertyChange adaptedChange = new PropertyChange(propertyName + "." + change.getName(), change.getValue());
       subject.notifyListeners(adaptedChange);
    }
 }

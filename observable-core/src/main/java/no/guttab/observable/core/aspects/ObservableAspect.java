@@ -1,18 +1,11 @@
 package no.guttab.observable.core.aspects;
 
-import java.util.List;
-
 import no.guttab.observable.core.PropertyChange;
 import no.guttab.observable.core.Subject;
 import no.guttab.observable.core.SubjectImpl;
-import no.guttab.observable.core.collections.ObservableCollections;
-import no.guttab.observable.core.collections.ObservableList;
-import no.guttab.observable.core.listeners.SubjectListListener;
 import no.guttab.observable.core.listeners.SubjectListener;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.DeclareMixin;
 import org.aspectj.lang.annotation.Pointcut;
@@ -38,11 +31,6 @@ public class ObservableAspect {
    void setObservedFieldOnObservable() {
    }
 
-   @Pointcut("set(!transient java.util.List *) && " +
-         "@target(no.guttab.observable.core.annotation.Observable)")
-   void setListFieldObservable() {
-   }
-
    @After(value = "setFieldOnObservable() && " +
          "this(subject)", argNames = "jp, subject")
    public void setFieldOnObservableAdvice(JoinPoint jp, Subject subject) throws Throwable {
@@ -60,21 +48,9 @@ public class ObservableAspect {
       if (jp.getArgs().length == 1) {
          final String propertyName = jp.getSignature().getName();
          final Subject arg = (Subject) jp.getArgs()[0];
-         log.debug("ObservedField '{}' was set to '{}'", propertyName, arg);
          arg.addListener(new SubjectListener(propertyName, subject));
          subject.notifyListeners(new PropertyChange(propertyName, arg));
       }
-   }
-
-   @SuppressWarnings({"unchecked"})
-   @Around(value = "setListFieldObservable() && " +
-         "this(subject)", argNames = "pjp,subject")
-   public List wrapList(ProceedingJoinPoint pjp, Subject subject) throws Throwable {
-      log.debug("Observable list accessed: {}", pjp.getSignature().toLongString());
-      final String propertyName = pjp.getSignature().getName();
-      final ObservableList observableList = ObservableCollections.observableList(propertyName, (List) pjp.proceed());
-      observableList.addObservableListListener(new SubjectListListener(subject));
-      return observableList;
    }
 
 

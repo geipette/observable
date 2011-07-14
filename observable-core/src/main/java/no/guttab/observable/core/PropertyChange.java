@@ -2,11 +2,11 @@ package no.guttab.observable.core;
 
 public class PropertyChange {
    private String name;
-   private Object property;
+   private Object value;
 
-   public PropertyChange(String name, Object property) {
+   public PropertyChange(String name, Object value) {
       this.name = name;
-      setProperty(property);
+      setValue(value);
    }
 
    public String getName() {
@@ -17,12 +17,12 @@ public class PropertyChange {
       this.name = name;
    }
 
-   public Object getProperty() {
-      return property;
+   public Object getValue() {
+      return value;
    }
 
-   public void setProperty(Object property) {
-      this.property = property;
+   public void setValue(Object value) {
+      this.value = value;
    }
 
    @Override
@@ -30,7 +30,7 @@ public class PropertyChange {
       final StringBuilder sb = new StringBuilder();
       sb.append("PropertyChange");
       sb.append("{name='").append(name).append('\'');
-      sb.append(", property=").append(property);
+      sb.append(", value=").append(value);
       sb.append('}');
       return sb.toString();
    }

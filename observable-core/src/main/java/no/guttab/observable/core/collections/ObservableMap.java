@@ -3,7 +3,7 @@ package no.guttab.observable.core.collections;
 import java.util.Map;
 
 /**
- * A {@code Map} that notifies listeners of changes to the {@code Map}.
+ * A <tt>Map</tt> that notifies listeners of changes to the <tt>Map</tt>.
  */
 public interface ObservableMap<K, V> extends Map<K, V> {
    /**

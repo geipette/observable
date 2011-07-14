@@ -1,11 +1,18 @@
 package no.guttab.observable.core.aspects;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import no.guttab.observable.core.annotation.Observable;
+import no.guttab.observable.core.annotation.ObservableCollection;
 
 @Observable
 public class ObservableForTesting {
 
-   private OtherObjectForTesting otherObjectForTesting = new OtherObjectForTesting();
+   private OtherObservableForTesting otherObservableForTesting = new OtherObservableForTesting();
+
+   @ObservableCollection
+   private List<String> listField = new ArrayList<String>();
 
    private String name;
    public transient String secretName;
@@ -19,6 +26,14 @@ public class ObservableForTesting {
    }
 
    public void setSomeValueInOtherObject(String someValue) {
-      otherObjectForTesting.setSomeValue(someValue);
+      otherObservableForTesting.setSomeValue(someValue);
+   }
+
+   public OtherObservableForTesting getOtherObservableForTesting() {
+      return otherObservableForTesting;
+   }
+
+   public List<String> getListField() {
+      return listField;
    }
 }

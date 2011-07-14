@@ -47,7 +47,7 @@ public class SubjectListListener implements ObservableListListener {
 
    @Override
    public void listElementPropertyChanged(ObservableList observableList, int index, PropertyChange propertyChange) {
-      subject.notifyListeners(new PropertyChange(getListId(observableList) + "[" + index + "]." + propertyChange.getName(), propertyChange.getProperty()));
+      subject.notifyListeners(new PropertyChange(getListId(observableList) + "[" + index + "]." + propertyChange.getName(), propertyChange.getValue()));
    }
 }
 

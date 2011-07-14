@@ -3,7 +3,7 @@ package no.guttab.observable.core.collections;
 import java.util.List;
 
 /**
- * A {@code List} that notifies listeners of changes.
+ * A <tt>List</tt> that notifies listeners of changes.
  */
 public interface ObservableList<E> extends List<E> {
 
