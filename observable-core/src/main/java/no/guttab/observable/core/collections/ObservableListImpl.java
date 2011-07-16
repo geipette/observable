@@ -6,9 +6,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import no.guttab.observable.core.PropertyChange;
-import no.guttab.observable.core.PropertyChangeListener;
-
 /**
  * @version $Revision$
  */
@@ -20,7 +17,6 @@ final class ObservableListImpl<E> extends AbstractList<E> implements ObservableL
    ObservableListImpl(String listId, List<E> list) {
       this.listId = listId;
       this.list = list;
-      replaceListElementsWithProxies(list);
    }
 
    @Override
@@ -45,12 +41,6 @@ final class ObservableListImpl<E> extends AbstractList<E> implements ObservableL
          listener.listElementReplaced(this, index, oldValue);
       }
       return oldValue;
-   }
-
-   private void replaceListElementsWithProxies(List<E> list) {
-      for (int i = 0; i < list.size(); i++) {
-         list.set(i, list.get(i));
-      }
    }
 
    @Override
@@ -128,23 +118,6 @@ final class ObservableListImpl<E> extends AbstractList<E> implements ObservableL
    @Override
    public void removeObservableListListener(ObservableListListener listener) {
       listeners.remove(listener);
-   }
-
-   private class ListElementChangedListener implements PropertyChangeListener {
-      private final ObservableListImpl<E> t;
-      private final E element;
-
-      public ListElementChangedListener(ObservableListImpl<E> t, E element) {
-         this.t = t;
-         this.element = element;
-      }
-
-      @Override
-      public void notifyChange(PropertyChange change) {
-         for (ObservableListListener<E> listener : listeners) {
-            listener.listElementPropertyChanged(t, list.indexOf(element), change);
-         }
-      }
    }
 
    @Override

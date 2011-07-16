@@ -8,9 +8,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import no.guttab.observable.core.PropertyChange;
-import no.guttab.observable.core.PropertyChangeListener;
-
 /**
  * @version $Revision$
  */
@@ -192,21 +189,5 @@ final class ObservableMapImpl<K, V> extends AbstractMap<K, V>
          ObservableMapImpl.this.clear();
       }
    }
-
-   private class MapElementChangedListener implements PropertyChangeListener {
-      private final ObservableMapImpl<K, V> observableMap;
-      private final K key;
-
-      public MapElementChangedListener(ObservableMapImpl<K, V> observableMap, K key) {
-         this.observableMap = observableMap;
-         this.key = key;
-      }
-
-      @Override
-      public void notifyChange(PropertyChange change) {
-         for (ObservableMapListener<K, V> listener : listeners) {
-            listener.mapValuePropertyChanged(observableMap, key, change);
-         }
-      }
-   }
 }
+
