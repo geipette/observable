@@ -1,12 +1,16 @@
 package no.guttab.observable.core;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class PropertyChange {
    private String name;
-   private Object value;
+   private List<?> values = new ArrayList<Object>();
 
-   public PropertyChange(String name, Object value) {
+   public PropertyChange(String name, Object... values) {
       this.name = name;
-      setValue(value);
+      this.values = Arrays.asList(values);
    }
 
    public String getName() {
@@ -18,11 +22,11 @@ public class PropertyChange {
    }
 
    public Object getValue() {
-      return value;
+      return getValue(0);
    }
 
-   public void setValue(Object value) {
-      this.value = value;
+   public Object getValue(int argNum) {
+      return values.get(argNum);
    }
 
    @Override
@@ -30,7 +34,7 @@ public class PropertyChange {
       final StringBuilder sb = new StringBuilder();
       sb.append("PropertyChange");
       sb.append("{name='").append(name).append('\'');
-      sb.append(", value=").append(value);
+      sb.append(", values=").append(values);
       sb.append('}');
       return sb.toString();
    }

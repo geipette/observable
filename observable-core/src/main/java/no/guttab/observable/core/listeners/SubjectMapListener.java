@@ -16,8 +16,8 @@ public class SubjectMapListener<K, V> implements ObservableMapListener<K, V> {
    }
 
    @Override
-   public void mapKeyValueChanged(ObservableMap<K, V> map, K key, V lastValue) {
-      subject.notifyListeners(new PropertyChange(getMapId(map) + "['" + key.toString() + "']", map.get(key)));
+   public void mapKeyValueChanged(ObservableMap<K, V> map, K key, V oldValue) {
+      subject.notifyListeners(new PropertyChange(getMapId(map) + "[#arg0]", map.get(key), oldValue));
    }
 
    private String getMapId(ObservableMap<K, V> map) {
@@ -26,16 +26,16 @@ public class SubjectMapListener<K, V> implements ObservableMapListener<K, V> {
 
    @Override
    public void mapKeyAdded(ObservableMap<K, V> map, K key) {
-      subject.notifyListeners(new PropertyChange(getMapId(map) + "['" + key.toString() + "']", map.get(key)));
+      subject.notifyListeners(new PropertyChange(getMapId(map) + "[#arg0]", key));
    }
 
    @Override
    public void mapKeyRemoved(ObservableMap<K, V> map, K key, V value) {
-      subject.notifyListeners(new PropertyChange(getMapId(map) + ".remove('" + key.toString() + "')", null));
+      subject.notifyListeners(new PropertyChange(getMapId(map) + ".remove(#arg0)", null));
    }
 
    @Override
    public void mapValuePropertyChanged(ObservableMap<K, V> observableMap, K key, PropertyChange propertyChange) {
-      subject.notifyListeners(new PropertyChange(getMapId(observableMap) + "['" + key.toString() + "']." + propertyChange.getName(), propertyChange.getValue()));
+      subject.notifyListeners(new PropertyChange(getMapId(observableMap) + "[#arg0]." + propertyChange.getName(), propertyChange.getValue()));
    }
 }
