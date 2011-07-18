@@ -58,6 +58,25 @@ public class ObservableAspectTest {
    }
 
    @Test
+   public void fieldMapContentChangeShouldTriggerChange() {
+      observableForTesting.getMapField().put("aNewKey", "aNewValue");
+
+      assertThat("Field map content change should trigger change", change[0], not(nullValue()));
+      assertThat(change[0].getName(), equalTo("mapField['aNewKey']"));
+      assertThat((String) change[0].getValue(), equalTo("aNewValue"));
+
+   }
+
+   @Test
+   public void fieldSetContentChangeShouldTriggerChange() {
+      observableForTesting.getSetField().add("aNewValue");
+
+      assertThat("Field set content change should trigger change", change[0], not(nullValue()));
+      assertThat(change[0].getName(), equalTo("setField.add(#arg0)"));
+      assertThat((String) change[0].getValue(), equalTo("aNewValue"));
+   }
+
+   @Test
    public void fieldOfTypeAnnotatedWithObservableFieldListContentChangeShouldTriggerChange() {
       observableForTesting.getOtherObservableForTesting().getListField().add("aNewListItem");
 
@@ -65,16 +84,6 @@ public class ObservableAspectTest {
       assertThat(change[0].getName(), equalTo("otherObservableForTesting.listField[0]"));
       assertThat((String) change[0].getValue(), equalTo("aNewListItem"));
    }
-
-   @Test
-   public void fieldOfTypeAnnotatedWithObservableFieldMapContentChangeShouldTriggerChange() {
-      observableForTesting.getOtherObservableForTesting().getMapField().put("aNewKey", "aNewValue");
-
-      assertThat("Field map content change should trigger change", change[0], not(nullValue()));
-      assertThat(change[0].getName(), equalTo("otherObservableForTesting.mapField['aNewKey']"));
-      assertThat((String) change[0].getValue(), equalTo("aNewValue"));
-   }
-
 
    private static void addChangeListener(Object observableForTesting, final PropertyChange[] change) {
       ((Subject) observableForTesting).addListener(new PropertyChangeListener() {

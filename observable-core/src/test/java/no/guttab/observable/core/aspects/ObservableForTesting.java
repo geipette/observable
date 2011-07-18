@@ -1,7 +1,11 @@
 package no.guttab.observable.core.aspects;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import no.guttab.observable.core.annotation.Observable;
 import no.guttab.observable.core.annotation.ObservableCollection;
@@ -14,7 +18,14 @@ public class ObservableForTesting {
    @ObservableCollection
    private List<String> listField = new ArrayList<String>();
 
+   @ObservableCollection
+   private Map<String, String> mapField = new HashMap<String, String>();
+
+   @ObservableCollection
+   private Set<String> setField = new HashSet<String>();
+
    private String name;
+
    public transient String secretName;
 
    public void changeName(String name) {
@@ -36,4 +47,13 @@ public class ObservableForTesting {
    public List<String> getListField() {
       return listField;
    }
+
+   public Map<String, String> getMapField() {
+      return mapField;
+   }
+
+   public Set<String> getSetField() {
+      return setField;
+   }
+
 }

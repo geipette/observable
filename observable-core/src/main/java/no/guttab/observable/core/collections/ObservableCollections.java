@@ -56,6 +56,7 @@ public final class ObservableCollections {
     *
     * @param mapId an id that identifies this map for observers. May be null.
     * @param map   the <tt>Map</tt> to wrap  @return an <tt>ObservableMap</tt>
+    * @return an <tt>ObservableMap</tt> wrapping the supplied
     * @throws IllegalArgumentException if <tt>map</tt> is <tt>null</tt>
     */
    public static <K, V> ObservableMap<K, V> observableMap(String mapId, Map<K, V> map) {

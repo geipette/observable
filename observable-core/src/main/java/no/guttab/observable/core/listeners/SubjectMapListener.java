@@ -7,7 +7,7 @@ import no.guttab.observable.core.collections.ObservableMapListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SubjectMapListener implements ObservableMapListener {
+public class SubjectMapListener<K, V> implements ObservableMapListener<K, V> {
    private static final Logger log = LoggerFactory.getLogger(SubjectMapListener.class);
    private final Subject subject;
 
@@ -16,26 +16,26 @@ public class SubjectMapListener implements ObservableMapListener {
    }
 
    @Override
-   public void mapKeyValueChanged(ObservableMap map, Object key, Object lastValue) {
+   public void mapKeyValueChanged(ObservableMap<K, V> map, K key, V lastValue) {
       subject.notifyListeners(new PropertyChange(getMapId(map) + "['" + key.toString() + "']", map.get(key)));
    }
 
-   private String getMapId(ObservableMap map) {
+   private String getMapId(ObservableMap<K, V> map) {
       return map.getMapId() == null ? "" : map.getMapId();
    }
 
    @Override
-   public void mapKeyAdded(ObservableMap map, Object key) {
+   public void mapKeyAdded(ObservableMap<K, V> map, K key) {
       subject.notifyListeners(new PropertyChange(getMapId(map) + "['" + key.toString() + "']", map.get(key)));
    }
 
    @Override
-   public void mapKeyRemoved(ObservableMap map, Object key, Object value) {
+   public void mapKeyRemoved(ObservableMap<K, V> map, K key, V value) {
       subject.notifyListeners(new PropertyChange(getMapId(map) + ".remove('" + key.toString() + "')", null));
    }
 
    @Override
-   public void mapValuePropertyChanged(ObservableMap observableMap, Object key, PropertyChange propertyChange) {
+   public void mapValuePropertyChanged(ObservableMap<K, V> observableMap, K key, PropertyChange propertyChange) {
       subject.notifyListeners(new PropertyChange(getMapId(observableMap) + "['" + key.toString() + "']." + propertyChange.getName(), propertyChange.getValue()));
    }
 }
