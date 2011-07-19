@@ -3,7 +3,7 @@ package no.guttab.observable.core.aspects;
 import no.guttab.observable.core.annotation.Observable;
 
 @Observable
-public class ObservableType {
+class ObservableType {
    private String simpleProperty;
 
    public ObservableType(String simpleProperty) {

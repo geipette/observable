@@ -42,7 +42,7 @@ public class SubjectListListener<T> implements ObservableListListener<T> {
    @Override
    public void listElementReplaced(ObservableList<T> observableList, int index, T oldElement) {
       log.debug("Element replaced");
-      subject.notifyListeners(new PropertyChange(getListId(observableList) + "[" + index + "]", observableList.get(index)));
+      subject.notifyListeners(new PropertyChange(getListId(observableList) + "[" + index + "]", observableList.get(index), oldElement));
    }
 
    @Override

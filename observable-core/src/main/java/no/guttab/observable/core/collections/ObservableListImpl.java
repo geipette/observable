@@ -115,6 +115,7 @@ final class ObservableListImpl<E> extends AbstractList<E> implements ObservableL
       return list.containsAll(c);
    }
 
+   @SuppressWarnings({"SuspiciousToArrayCall"})
    @Override
    public <T> T[] toArray(T[] a) {
       return list.toArray(a);

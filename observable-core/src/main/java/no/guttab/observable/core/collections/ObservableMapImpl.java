@@ -18,14 +18,13 @@ import no.guttab.observable.core.Subject;
 final class ObservableMapImpl<K, V> extends AbstractMap<K, V>
       implements ObservableMap<K, V> {
    private final String mapId;
-   private Map<K, V> map;
-   private List<ObservableMapListener<K, V>> listeners;
+   private final Map<K, V> map;
+   private final List<ObservableMapListener<K, V>> listeners = new CopyOnWriteArrayList<ObservableMapListener<K, V>>();
    private Set<Entry<K, V>> entrySet;
 
    ObservableMapImpl(String mapId, Map<K, V> map) {
       this.mapId = mapId;
       this.map = map;
-      listeners = new CopyOnWriteArrayList<ObservableMapListener<K, V>>();
    }
 
    @Override
@@ -154,7 +153,7 @@ final class ObservableMapImpl<K, V> extends AbstractMap<K, V>
    }
 
    private class EntryIterator implements Iterator<Entry<K, V>> {
-      private Iterator<Entry<K, V>> realIterator;
+      private final Iterator<Entry<K, V>> realIterator;
       private Entry<K, V> last;
 
       EntryIterator() {

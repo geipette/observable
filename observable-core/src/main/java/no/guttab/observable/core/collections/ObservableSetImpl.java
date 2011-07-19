@@ -52,7 +52,7 @@ final class ObservableSetImpl<E> extends AbstractSet<E>
    @Override
    public Iterator<E> iterator() {
       return new Iterator<E>() {
-         Iterator setIt = set.iterator();
+         final Iterator setIt = set.iterator();
          E current;
 
          @Override

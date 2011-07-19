@@ -41,8 +41,9 @@ public interface ObservableListListener<T> {
    /**
     * Notification than a property of an element in this list has changed.
     *
-    * @param list  the <tt>ObservableList</tt> that has changed
-    * @param index the index of the element that changed
+    * @param list           the <tt>ObservableList</tt> that has changed
+    * @param index          the index of the element that changed
+    * @param propertyChange the property change
     */
    public void listElementPropertyChanged(ObservableList<T> list, int index, PropertyChange propertyChange);
 }
