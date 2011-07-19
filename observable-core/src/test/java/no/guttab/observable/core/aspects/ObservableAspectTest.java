@@ -23,7 +23,6 @@ public class ObservableAspectTest {
 
    @Test
    public void fieldChangeShouldTriggerChange() throws Exception {
-
       observableForTesting.changeName("jodle");
 
       assertThat(change, not(nullValue()));
@@ -48,15 +47,6 @@ public class ObservableAspectTest {
    }
 
    @Test
-   public void fieldListContentChangeShouldTriggerChange() {
-      observableForTesting.getListField().add("aNewListItem");
-
-      assertThat("Field list content change should trigger change", change, not(nullValue()));
-      assertThat(change.getName(), equalTo("listField[0]"));
-      assertThat((String) change.getValue(), equalTo("aNewListItem"));
-   }
-
-   @Test
    public void fieldMapContentChangeShouldTriggerChange() {
       observableForTesting.getMapField().put("aNewKey", "aNewValue");
 
@@ -75,15 +65,6 @@ public class ObservableAspectTest {
       assertThat("Field set content change should trigger change", change, not(nullValue()));
       assertThat(change.getName(), equalTo("setField.add(#arg0)"));
       assertThat((String) change.getValue(), equalTo("aNewValue"));
-   }
-
-   @Test
-   public void fieldOfTypeAnnotatedWithObservableFieldListContentChangeShouldTriggerChange() {
-      observableForTesting.getOtherObservableForTesting().getListField().add("aNewListItem");
-
-      assertThat("Field list content change should trigger change", change, not(nullValue()));
-      assertThat(change.getName(), equalTo("otherObservableForTesting.listField[0]"));
-      assertThat((String) change.getValue(), equalTo("aNewListItem"));
    }
 
    private void addChangeListener(Object observableForTesting) {

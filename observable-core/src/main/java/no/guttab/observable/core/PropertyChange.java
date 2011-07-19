@@ -2,6 +2,7 @@ package no.guttab.observable.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class PropertyChange {
@@ -10,7 +11,11 @@ public class PropertyChange {
 
    public PropertyChange(String name, Object... values) {
       this.name = name;
-      this.values = Arrays.asList(values);
+      if (values != null) {
+         this.values = Arrays.asList(values);
+      } else {
+         this.values = Collections.emptyList();
+      }
    }
 
    public String getName() {

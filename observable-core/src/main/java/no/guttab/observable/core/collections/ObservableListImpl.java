@@ -6,6 +6,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import no.guttab.observable.core.PropertyChange;
+import no.guttab.observable.core.PropertyChangeListener;
+import no.guttab.observable.core.Subject;
+
+import static java.util.Collections.singletonList;
+
 /**
  * @version $Revision$
  */
@@ -37,9 +43,11 @@ final class ObservableListImpl<E> extends AbstractList<E> implements ObservableL
    @Override
    public E set(int index, E element) {
       E oldValue = list.set(index, element);
+      removeElementChangedListener(oldValue);
       for (ObservableListListener<E> listener : listeners) {
          listener.listElementReplaced(this, index, oldValue);
       }
+      addElementChangedListener(element);
       return oldValue;
    }
 
@@ -47,6 +55,7 @@ final class ObservableListImpl<E> extends AbstractList<E> implements ObservableL
    public void add(int index, E element) {
       list.add(index, element);
       modCount++;
+      addElementChangedListener(element);
       for (ObservableListListener<E> listener : listeners) {
          listener.listElementsAdded(this, index, 1);
       }
@@ -56,9 +65,9 @@ final class ObservableListImpl<E> extends AbstractList<E> implements ObservableL
    public E remove(int index) {
       E oldValue = list.remove(index);
       modCount++;
+      removeElementChangedListener(oldValue);
       for (ObservableListListener<E> listener : listeners) {
-         listener.listElementsRemoved(this, index,
-               java.util.Collections.singletonList(oldValue));
+         listener.listElementsRemoved(this, index, singletonList(oldValue));
       }
       return oldValue;
    }
@@ -72,7 +81,10 @@ final class ObservableListImpl<E> extends AbstractList<E> implements ObservableL
    public boolean addAll(int index, Collection<? extends E> c) {
       boolean modified = false;
       for (E e : c) {
-         modified |= list.add(e);
+         if (list.add(e)) {
+            addElementChangedListener(e);
+            modified = true;
+         }
          modCount++;
       }
       if (modified) {
@@ -88,7 +100,10 @@ final class ObservableListImpl<E> extends AbstractList<E> implements ObservableL
       List<E> dup = new ArrayList<E>(list);
       list.clear();
       modCount++;
-      if (dup.size() != 0) {
+      if (!dup.isEmpty()) {
+         for (E e : dup) {
+            removeElementChangedListener(e);
+         }
          for (ObservableListListener<E> listener : listeners) {
             listener.listElementsRemoved(this, 0, dup);
          }
@@ -123,5 +138,37 @@ final class ObservableListImpl<E> extends AbstractList<E> implements ObservableL
    @Override
    public String toString() {
       return "ObservableListImpl" + super.toString();
+   }
+
+   private void removeElementChangedListener(E oldValue) {
+      if (oldValue instanceof Subject) {
+         Subject subject = (Subject) oldValue;
+         subject.deleteAllListeners();
+      }
+   }
+
+   private void addElementChangedListener(E element) {
+      if (element instanceof Subject) {
+         Subject subject = (Subject) element;
+         subject.addListener(new ListElementChangedListener(this, element));
+      }
+   }
+
+   private class ListElementChangedListener implements PropertyChangeListener {
+      private final ObservableListImpl<E> t;
+
+      private final E element;
+
+      public ListElementChangedListener(ObservableListImpl<E> t, E element) {
+         this.t = t;
+         this.element = element;
+      }
+
+      @Override
+      public void notifyChange(PropertyChange change) {
+         for (ObservableListListener<E> listener : listeners) {
+            listener.listElementPropertyChanged(t, list.indexOf(element), change);
+         }
+      }
    }
 }

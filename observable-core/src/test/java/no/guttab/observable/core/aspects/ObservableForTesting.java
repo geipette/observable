@@ -1,9 +1,7 @@
 package no.guttab.observable.core.aspects;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,9 +12,6 @@ import no.guttab.observable.core.annotation.ObservableCollection;
 public class ObservableForTesting {
 
    private OtherObservableForTesting otherObservableForTesting = new OtherObservableForTesting();
-
-   @ObservableCollection
-   private List<String> listField = new ArrayList<String>();
 
    @ObservableCollection
    private Map<String, String> mapField = new HashMap<String, String>();
@@ -42,10 +37,6 @@ public class ObservableForTesting {
 
    public OtherObservableForTesting getOtherObservableForTesting() {
       return otherObservableForTesting;
-   }
-
-   public List<String> getListField() {
-      return listField;
    }
 
    public Map<String, String> getMapField() {

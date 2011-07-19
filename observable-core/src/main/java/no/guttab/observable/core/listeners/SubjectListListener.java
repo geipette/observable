@@ -35,7 +35,7 @@ public class SubjectListListener<T> implements ObservableListListener<T> {
       log.debug("Elements removed");
       final String listId = getListId(observableList);
       for (T oldElement : oldElements) {
-         subject.notifyListeners(new PropertyChange(listId + ".remove(" + index + ")", null));
+         subject.notifyListeners(new PropertyChange(listId + ".remove(" + index + ")", oldElement));
       }
    }
 
