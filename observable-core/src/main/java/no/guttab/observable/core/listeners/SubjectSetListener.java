@@ -28,7 +28,7 @@ public class SubjectSetListener<T> implements ObservableSetListener<T> {
 
    @Override
    public void setElementPropertyChanged(ObservableSet<T> set, T element, PropertyChange propertyChange) {
-      subject.notifyListeners(new PropertyChange(getSetId(set) + ".get(#arg0)." + propertyChange.getName() + " = #arg1",
+      subject.notifyListeners(new PropertyChange(getSetId(set) + "[#arg0]." + propertyChange.getName(),
             element, propertyChange.getValue()));
    }
 }

@@ -1,16 +1,16 @@
 package no.guttab.observable.core.collections;
 
 import java.util.AbstractSet;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import no.guttab.observable.core.PropertyChange;
 import no.guttab.observable.core.PropertyChangeListener;
+import no.guttab.observable.core.Subject;
 
 
-public class ObservableSetImpl<E> extends AbstractSet<E>
+final class ObservableSetImpl<E> extends AbstractSet<E>
       implements ObservableSet<E> {
    private final String setId;
    private final Set<E> set;
@@ -19,7 +19,6 @@ public class ObservableSetImpl<E> extends AbstractSet<E>
    public ObservableSetImpl(String setId, Set<E> set) {
       this.setId = setId;
       this.set = set;
-      replaceSetElementsWithProxies(set);
    }
 
    @Override
@@ -37,21 +36,13 @@ public class ObservableSetImpl<E> extends AbstractSet<E>
       listeners.remove(listener);
    }
 
-   private void replaceSetElementsWithProxies(Set<E> set) {
-      Set<E> tmpSet = new HashSet<E>();
-      for (E element : set) {
-         tmpSet.add(element);
-      }
-      set.clear();
-      set.addAll(tmpSet);
-   }
-
    @Override
    public boolean add(E e) {
       if (set.add(e)) {
          for (ObservableSetListener<E> listener : listeners) {
             listener.setElementAdded(this, e);
          }
+         addElementListener(e);
          return true;
       }
       return false;
@@ -82,6 +73,7 @@ public class ObservableSetImpl<E> extends AbstractSet<E>
             for (ObservableSetListener<E> listener : listeners) {
                listener.setElementsRemoved(ObservableSetImpl.this, current);
             }
+            removeElementListener(current);
          }
       };
    }
@@ -89,6 +81,18 @@ public class ObservableSetImpl<E> extends AbstractSet<E>
    @Override
    public int size() {
       return set.size();
+   }
+
+   private void removeElementListener(E value) {
+      if (value instanceof Subject) {
+         ((Subject) value).deleteAllListeners();
+      }
+   }
+
+   private void addElementListener(E value) {
+      if (value instanceof Subject) {
+         ((Subject) value).addListener(new SetElementChangedListener(this, value));
+      }
    }
 
    private class SetElementChangedListener implements PropertyChangeListener {

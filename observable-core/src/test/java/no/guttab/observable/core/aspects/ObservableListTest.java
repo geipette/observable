@@ -32,7 +32,7 @@ public class ObservableListTest {
    }
 
    @Test
-   public void listContentAddShouldTriggerChange() {
+   public void listContent_Add_ShouldTriggerChange() {
       String newValue = "aString";
       List<String> strings = observableTypeWithList.getListWithStrings();
       strings.add(newValue);
@@ -50,7 +50,7 @@ public class ObservableListTest {
    }
 
    @Test
-   public void listContentRemoveShouldTriggerChange() {
+   public void listContent_Remove_ShouldTriggerChange() {
       List<String> strings = observableTypeWithList.getListWithStrings();
       strings.add("value1");
       strings.add("value2");
@@ -73,7 +73,7 @@ public class ObservableListTest {
    }
 
    @Test
-   public void listContentReplaceShouldTriggerChange() {
+   public void listContent_Replace_ShouldTriggerChange() {
       List<String> strings = observableTypeWithList.getListWithStrings();
       strings.add("value1");
       strings.add("value2");
@@ -88,7 +88,7 @@ public class ObservableListTest {
    }
 
    @Test
-   public void listWithObservableTypeShouldTriggerChangeIfObservableTypeChanged() {
+   public void listWithObservableType_ShouldTriggerChange_IfObservableTypeChanged() {
       ObservableType propertyOnContentInPos0 = new ObservableType("propertyOnContentInPos0");
       ObservableType propertyOnContentInPos1 = new ObservableType("propertyOnContentInPos1");
       ObservableType propertyOnContentInPos2 = new ObservableType("propertyOnContentInPos2");
@@ -122,7 +122,7 @@ public class ObservableListTest {
    }
 
    @Test
-   public void listWithObservableTypeShouldNotTriggerChangeIfObservableTypeRemovedFromList() {
+   public void listWithObservableType_ShouldNotTriggerChange_IfObservableTypeRemovedFromList() {
       ObservableType propertyOnContentInPos0 = new ObservableType("propertyOnContentInPos0");
       ObservableType propertyOnContentInPos1 = new ObservableType("propertyOnContentInPos1");
       ObservableType propertyOnContentInPos2 = new ObservableType("propertyOnContentInPos2");

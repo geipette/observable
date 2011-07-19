@@ -8,6 +8,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import no.guttab.observable.core.PropertyChange;
+import no.guttab.observable.core.PropertyChangeListener;
+import no.guttab.observable.core.Subject;
+
 /**
  * @version $Revision$
  */
@@ -31,7 +35,6 @@ final class ObservableMapImpl<K, V> extends AbstractMap<K, V>
 
    @Override
    public void clear() {
-      // Remove all elements via iterator to trigger notification
       Iterator<K> iterator = keySet().iterator();
       while (iterator.hasNext()) {
          iterator.next();
@@ -80,6 +83,8 @@ final class ObservableMapImpl<K, V> extends AbstractMap<K, V>
             listener.mapKeyAdded(this, key);
          }
       }
+      removeElementListener(lastValue);
+      addElementListener(key, value);
       return lastValue;
    }
 
@@ -95,6 +100,7 @@ final class ObservableMapImpl<K, V> extends AbstractMap<K, V>
    public V remove(Object key) {
       if (containsKey(key)) {
          V value = map.remove(key);
+         removeElementListener(value);
          for (ObservableMapListener<K, V> listener : listeners) {
             listener.mapKeyRemoved(this, (K) key, value);
          }
@@ -118,6 +124,34 @@ final class ObservableMapImpl<K, V> extends AbstractMap<K, V>
       listeners.remove(listener);
    }
 
+   private void removeElementListener(V value) {
+      if (value instanceof Subject) {
+         ((Subject) value).deleteAllListeners();
+      }
+   }
+
+   private void addElementListener(K key, V value) {
+      if (value instanceof Subject) {
+         ((Subject) value).addListener(new MapElementChangedListener(this, key));
+      }
+   }
+
+   private class MapElementChangedListener implements PropertyChangeListener {
+      private final ObservableMapImpl<K, V> observableMap;
+      private final K key;
+
+      public MapElementChangedListener(ObservableMapImpl<K, V> observableMap, K key) {
+         this.observableMap = observableMap;
+         this.key = key;
+      }
+
+      @Override
+      public void notifyChange(PropertyChange change) {
+         for (ObservableMapListener<K, V> listener : listeners) {
+            listener.mapValuePropertyChanged(observableMap, key, change);
+         }
+      }
+   }
 
    private class EntryIterator implements Iterator<Entry<K, V>> {
       private Iterator<Entry<K, V>> realIterator;
@@ -143,12 +177,14 @@ final class ObservableMapImpl<K, V> extends AbstractMap<K, V>
          if (last == null) {
             throw new IllegalStateException();
          }
-         Object toRemove = last.getKey();
+         realIterator.remove();
+         for (ObservableMapListener<K, V> listener : listeners) {
+            listener.mapKeyRemoved(ObservableMapImpl.this, last.getKey(), last.getValue());
+         }
+         ObservableMapImpl.this.removeElementListener(last.getValue());
          last = null;
-         ObservableMapImpl.this.remove(toRemove);
       }
    }
-
 
    private class EntrySet extends AbstractSet<Entry<K, V>> {
       @Override
