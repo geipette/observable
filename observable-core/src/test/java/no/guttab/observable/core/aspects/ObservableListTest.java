@@ -169,18 +169,4 @@ public class ObservableListTest {
       }
    }
 
-   @Observable
-   public static class ObservableType {
-      private String simpleProperty;
-
-      public ObservableType(String simpleProperty) {
-         this.simpleProperty = simpleProperty;
-      }
-
-      public void setSimpleProperty(String simpleProperty) {
-         this.simpleProperty = simpleProperty;
-      }
-   }
-
-
 }
