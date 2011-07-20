@@ -23,12 +23,12 @@ public class ObservableListTest {
 
    private PropertyChange change;
    private ObservableTypeWithList observableTypeWithList;
+   private PropertyChangeListener listener;
 
    @Before
    public void setUp() throws Exception {
       observableTypeWithList = new ObservableTypeWithList();
-
-      addChangeListenerFor(observableTypeWithList);
+      listener = addChangeListenerFor(observableTypeWithList);
    }
 
    @Test
@@ -144,13 +144,31 @@ public class ObservableListTest {
       assertThat(change, nullValue());
    }
 
-   private void addChangeListenerFor(Object observableForTesting) {
-      ((Subject) observableForTesting).addListener(new PropertyChangeListener() {
+   @Test
+   public void multipleAccessesOfList_ShouldNotAffectChangeCallCount() {
+      final int[] changeCount = new int[]{0};
+      ((Subject) observableTypeWithList).addListener(new PropertyChangeListener() {
+         @Override
+         public void notifyChange(PropertyChange change) {
+            changeCount[0]++;
+         }
+      });
+      List<String> list1 = observableTypeWithList.getListWithStrings();
+      List<String> list2 = observableTypeWithList.getListWithStrings();
+
+      list1.add("test");
+      assertThat(changeCount[0], equalTo(1));
+   }
+
+   private PropertyChangeListener addChangeListenerFor(Object observableForTesting) {
+      PropertyChangeListener listener = new PropertyChangeListener() {
          @Override
          public void notifyChange(PropertyChange notifiedChange) {
             change = notifiedChange;
          }
-      });
+      };
+      ((Subject) observableForTesting).addListener(listener);
+      return listener;
    }
 
    @Observable

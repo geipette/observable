@@ -5,7 +5,7 @@ import no.guttab.observable.core.Subject;
 import no.guttab.observable.core.SubjectImpl;
 import no.guttab.observable.core.listeners.SubjectListener;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.DeclareMixin;
 import org.aspectj.lang.annotation.Pointcut;
@@ -31,7 +31,7 @@ public class ObservableAspect {
    void setObservedFieldOnObservable() {
    }
 
-   @After(value = "setFieldOnObservable() && " +
+   @AfterReturning(value = "setFieldOnObservable() && " +
          "this(subject)", argNames = "jp, subject")
    public void setFieldOnObservableAdvice(JoinPoint jp, Subject subject) throws Throwable {
       if (jp.getArgs().length == 1) {
@@ -42,7 +42,7 @@ public class ObservableAspect {
       }
    }
 
-   @After(value = "setObservedFieldOnObservable() && " +
+   @AfterReturning(value = "setObservedFieldOnObservable() && " +
          "this(subject)", argNames = "jp, subject")
    public void setObservedFieldOnObservableAdvice(JoinPoint jp, Subject subject) throws Throwable {
       if (jp.getArgs().length == 1) {

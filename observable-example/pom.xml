@@ -17,6 +17,12 @@
          <artifactId>observable-core</artifactId>
          <version>${version}</version>
       </dependency>
+      <dependency>
+         <groupId>${groupId}</groupId>
+         <artifactId>observable-el</artifactId>
+         <version>${version}</version>
+      </dependency>
+
    </dependencies>
 
 
