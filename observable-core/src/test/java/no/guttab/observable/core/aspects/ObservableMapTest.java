@@ -40,7 +40,8 @@ public class ObservableMapTest {
 
       assertThat(change, not(nullValue()));
       assertThat(change.getName(), equalTo("mapWithStrings[#arg0]"));
-      assertThat((String) change.getValue(0), sameInstance(newKey));
+      assertThat((String) change.getArg(0), sameInstance(newKey));
+      assertThat((String) change.getValue(), equalTo(newValue1));
    }
 
    @Test
@@ -57,7 +58,8 @@ public class ObservableMapTest {
 
       assertThat(change, not(nullValue()));
       assertThat(change.getName(), equalTo("mapWithStrings[#arg0]"));
-      assertThat((String) change.getValue(0), sameInstance(newKey));
+      assertThat((String) change.getArg(0), sameInstance(newKey));
+      assertThat((String) change.getValue(), equalTo("valueStr2"));
    }
 
 
@@ -73,8 +75,8 @@ public class ObservableMapTest {
 
       assertThat(change, not(nullValue()));
       assertThat(change.getName(), equalTo("mapWithStrings.remove(#arg0)"));
-      assertThat((String) change.getValue(0), equalTo("key1"));
-      assertThat((String) change.getValue(1), equalTo("value1"));
+      assertThat((String) change.getArg(0), equalTo("key1"));
+      assertThat((String) change.getValue(), equalTo("value1"));
 
    }
 
@@ -91,8 +93,8 @@ public class ObservableMapTest {
 
       assertThat(change, not(nullValue()));
       assertThat(change.getName(), equalTo("mapWithStrings.remove(#arg0)"));
-      assertThat((String) change.getValue(0), equalTo("key3"));
-      assertThat((String) change.getValue(1), equalTo("value3"));
+      assertThat((String) change.getArg(0), equalTo("key3"));
+      assertThat((String) change.getValue(), equalTo("value3"));
    }
 
 
@@ -107,8 +109,8 @@ public class ObservableMapTest {
 
       assertThat(change, not(nullValue()));
       assertThat(change.getName(), equalTo("mapWithStrings.remove(#arg0)"));
-      assertThat((String) change.getValue(0), equalTo("key2"));
-      assertThat((String) change.getValue(1), equalTo("value2"));
+      assertThat((String) change.getArg(0), equalTo("key2"));
+      assertThat((String) change.getValue(), equalTo("value2"));
    }
 
    @Test
@@ -123,8 +125,8 @@ public class ObservableMapTest {
 
       assertThat(change, not(nullValue()));
       assertThat(change.getName(), equalTo("mapWithStrings.remove(#arg0)"));
-      assertThat((String) change.getValue(0), equalTo("key1"));
-      assertThat((String) change.getValue(1), equalTo("value1"));
+      assertThat((String) change.getArg(0), equalTo("key1"));
+      assertThat((String) change.getValue(), equalTo("value1"));
    }
 
    @Test
@@ -146,16 +148,16 @@ public class ObservableMapTest {
 
       assertThat(change, not(nullValue()));
       assertThat(change.getName(), equalTo("mapWithObservableValues[#arg0].simpleProperty"));
-      assertThat((String) change.getValue(0), equalTo("key1"));
-      assertThat((String) change.getValue(1), equalTo("value1Changed"));
+      assertThat((String) change.getArg(0), equalTo("key1"));
+      assertThat((String) change.getValue(), equalTo("value1Changed"));
 
       change = null;
       value3.setSimpleProperty("value3Changed");
 
       assertThat(change, not(nullValue()));
       assertThat(change.getName(), equalTo("mapWithObservableValues[#arg0].simpleProperty"));
-      assertThat((String) change.getValue(0), equalTo("key3"));
-      assertThat((String) change.getValue(1), equalTo("value3Changed"));
+      assertThat((String) change.getArg(0), equalTo("key3"));
+      assertThat((String) change.getValue(), equalTo("value3Changed"));
    }
 
    @Test

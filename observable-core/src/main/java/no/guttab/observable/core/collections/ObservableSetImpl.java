@@ -5,10 +5,6 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import no.guttab.observable.core.PropertyChange;
-import no.guttab.observable.core.PropertyChangeListener;
-import no.guttab.observable.core.Subject;
-
 
 final class ObservableSetImpl<E> extends AbstractSet<E>
       implements ObservableSet<E> {
@@ -42,7 +38,6 @@ final class ObservableSetImpl<E> extends AbstractSet<E>
          for (ObservableSetListener<E> listener : listeners) {
             listener.setElementAdded(this, e);
          }
-         addElementListener(e);
          return true;
       }
       return false;
@@ -73,7 +68,6 @@ final class ObservableSetImpl<E> extends AbstractSet<E>
             for (ObservableSetListener<E> listener : listeners) {
                listener.setElementsRemoved(ObservableSetImpl.this, current);
             }
-            removeElementListener(current);
          }
       };
    }
@@ -83,33 +77,4 @@ final class ObservableSetImpl<E> extends AbstractSet<E>
       return set.size();
    }
 
-   private void removeElementListener(E value) {
-      if (value instanceof Subject) {
-         ((Subject) value).deleteAllListeners();
-      }
-   }
-
-   private void addElementListener(E value) {
-      if (value instanceof Subject) {
-         ((Subject) value).addListener(new SetElementChangedListener(this, value));
-      }
-   }
-
-   private class SetElementChangedListener implements PropertyChangeListener {
-      private final ObservableSetImpl<E> t;
-      private final E element;
-
-      public SetElementChangedListener(ObservableSetImpl<E> t, E element) {
-         this.t = t;
-         this.element = element;
-      }
-
-      @Override
-      public void notifyChange(PropertyChange change) {
-         for (ObservableSetListener<E> listener : listeners) {
-            listener.setElementPropertyChanged(t, element, change);
-         }
-      }
-
-   }
 }

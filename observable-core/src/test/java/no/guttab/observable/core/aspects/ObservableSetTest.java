@@ -70,7 +70,7 @@ public class ObservableSetTest {
 
       assertThat(change, not(nullValue()));
       assertThat(change.getName(), equalTo("setWithStrings.remove(#arg0)"));
-      assertThat((String) change.getValue(0), equalTo("value1"));
+      assertThat((String) change.getValue(), equalTo("value1"));
    }
 
    @Test
@@ -84,7 +84,7 @@ public class ObservableSetTest {
 
       assertThat(change, not(nullValue()));
       assertThat(change.getName(), equalTo("setWithStrings.remove(#arg0)"));
-      assertThat((String) change.getValue(0), equalTo("value1"));
+      assertThat((String) change.getValue(), equalTo("value1"));
    }
 
    @Test
@@ -99,7 +99,7 @@ public class ObservableSetTest {
 
       assertThat(change, not(nullValue()));
       assertThat(change.getName(), equalTo("setWithStrings.remove(#arg0)"));
-      assertThat((String) change.getValue(0), equalTo("value1"));
+      assertThat((String) change.getValue(), equalTo("value1"));
    }
 
    @Test
@@ -114,8 +114,8 @@ public class ObservableSetTest {
 
       assertThat(change, not(nullValue()));
       assertThat(change.getName(), equalTo("setWithObservables[#arg0].simpleProperty"));
-      assertThat((ObservableType) change.getValue(0), equalTo(value1));
-      assertThat((String) change.getValue(1), equalTo("value1changed"));
+      assertThat((ObservableType) change.getArg(0), equalTo(value1));
+      assertThat((String) change.getValue(), equalTo("value1changed"));
    }
 
    @Test

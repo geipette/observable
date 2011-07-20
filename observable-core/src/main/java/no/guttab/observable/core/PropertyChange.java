@@ -27,11 +27,15 @@ public class PropertyChange {
    }
 
    public Object getValue() {
-      return getValue(0);
+      return getArg(getArgCount());
    }
 
-   public Object getValue(int argNum) {
+   public Object getArg(int argNum) {
       return values.get(argNum);
+   }
+
+   public int getArgCount() {
+      return values.size() - 1;
    }
 
    @Override
