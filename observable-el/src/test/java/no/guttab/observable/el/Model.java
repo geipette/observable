@@ -1,6 +1,7 @@
 package no.guttab.observable.el;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import no.guttab.observable.core.annotation.Observable;
@@ -13,7 +14,10 @@ class Model {
    private SubModel subModel = new SubModel();
 
    @ObservableCollection
-   private List<String> stringList;
+   private List<String> stringList = new ArrayList<String>();
+
+   @ObservableCollection
+   private List<SubModel> subModelList = new ArrayList<SubModel>();
 
    public String getName() {
       return name;
@@ -37,5 +41,9 @@ class Model {
 
    public void setStringList(List<String> stringList) {
       this.stringList = stringList;
+   }
+
+   public List<SubModel> getSubModelList() {
+      return subModelList;
    }
 }

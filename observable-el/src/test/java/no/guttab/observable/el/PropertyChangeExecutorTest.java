@@ -60,8 +60,7 @@ public class PropertyChangeExecutorTest {
 
    @Test
    public void shouldPropagate_StringList_ContentAdd_FromOriginToTarget() {
-      List<String> list = new ArrayList<String>();
-      origin.setStringList(list);
+      List<String> list = origin.getStringList();
 
       list.add("bil");
       list.add("båt");
@@ -73,8 +72,8 @@ public class PropertyChangeExecutorTest {
 
    @Test
    public void shouldPropagate_StringList_ContentSet_FromOriginToTarget() {
-      List<String> list = new ArrayList<String>(Arrays.asList("bil", "båt"));
-      origin.setStringList(list);
+      List<String> list = origin.getStringList();
+      list.addAll(Arrays.asList("bil", "båt"));
 
       origin.getStringList().set(1, "fly");
 
@@ -85,14 +84,28 @@ public class PropertyChangeExecutorTest {
 
    @Test
    public void shouldPropagate_StringList_ContentRemove_FromOriginToTarget() {
-      List<String> list = new ArrayList<String>(Arrays.asList("bil", "båt"));
-      origin.setStringList(list);
+      List<String> list = origin.getStringList();
+      list.addAll(Arrays.asList("bil", "båt"));
 
       origin.getStringList().remove("båt");
 
       assertThat(target.getStringList(), not(nullValue()));
       assertThat(target.getStringList(), hasItems("bil"));
       assertThat("List: " + target.getStringList(), target.getStringList().size(), equalTo(1));
+   }
+
+   @Test
+   public void shouldPropagate_SubModelList_Content_ElementFieldChange_FromOriginToTarget() {
+      SubModel subModel = new SubModel("oldName");
+      origin.getSubModelList().add(subModel);
+
+      assertThat(target.getSubModelList(), not(nullValue()));
+      assertThat(target.getSubModelList().size(), equalTo(1));
+      assertThat(target.getSubModelList().get(0).getName(), equalTo("oldName"));
+
+      subModel.setName("newName");
+
+      assertThat(target.getSubModelList().get(0).getName(), equalTo("newName"));
    }
 
 

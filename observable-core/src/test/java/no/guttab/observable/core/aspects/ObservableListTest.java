@@ -38,15 +38,15 @@ public class ObservableListTest {
       strings.add(newValue);
 
       assertThat(change, not(nullValue()));
-      assertThat(change.getName(), equalTo("listWithStrings[0]"));
-      assertThat((String) change.getValue(), sameInstance(newValue));
+      assertThat(change.getName(), equalTo("listWithStrings.add(#arg0)"));
+      assertThat((String) change.getArg(0), sameInstance(newValue));
 
       change = null;
       strings.add(newValue);
 
       assertThat(change, not(nullValue()));
-      assertThat(change.getName(), equalTo("listWithStrings[1]"));
-      assertThat((String) change.getValue(), sameInstance(newValue));
+      assertThat(change.getName(), equalTo("listWithStrings.add(#arg0)"));
+      assertThat((String) change.getArg(0), sameInstance(newValue));
    }
 
    @Test

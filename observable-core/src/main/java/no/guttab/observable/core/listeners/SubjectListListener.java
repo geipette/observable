@@ -25,7 +25,7 @@ public class SubjectListListener<T> implements ObservableListListener<T> {
       for (int i = index; i < (index + length); i++) {
          final T value = observableList.get(i);
          addElementChangedListener(observableList, value);
-         subject.notifyListeners(new PropertyChange(listId + "[" + i + "]", value));
+         subject.notifyListeners(new PropertyChange(listId + ".add(#arg0)", null, value));
       }
    }
 
@@ -39,8 +39,6 @@ public class SubjectListListener<T> implements ObservableListListener<T> {
       final String listId = getListId(observableList);
       for (T oldElement : oldElements) {
          removeElementChangedListener(oldElement);
-         // TODO: OldElement supplied twice as a quick fix, PropertyChange does not support one arg and no value.
-         // TODO: Should be able to use index instead
          subject.notifyListeners(new PropertyChange(listId + ".remove(#arg0)", null, index));
       }
    }
