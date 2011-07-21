@@ -27,6 +27,9 @@ public class PropertyChange {
    }
 
    public Object getValue() {
+      if (getArgCount() < 0) {
+         return null;
+      }
       return getArg(getArgCount());
    }
 

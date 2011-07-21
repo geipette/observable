@@ -88,11 +88,11 @@ public class PropertyChangeExecutorTest {
       List<String> list = new ArrayList<String>(Arrays.asList("bil", "båt"));
       origin.setStringList(list);
 
-      origin.getStringList().remove("bil");
+      origin.getStringList().remove("båt");
 
       assertThat(target.getStringList(), not(nullValue()));
       assertThat(target.getStringList(), hasItems("bil"));
-      assertThat(target.getStringList().size(), equalTo(1));
+      assertThat("List: " + target.getStringList(), target.getStringList().size(), equalTo(1));
    }
 
 

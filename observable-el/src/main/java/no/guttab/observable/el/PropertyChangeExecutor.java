@@ -1,5 +1,6 @@
 package no.guttab.observable.el;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +26,11 @@ public class PropertyChangeExecutor {
       log.debug("Executing propertyChange: '{}'", propertyChange.getName());
       final Expression exp = parser.parseExpression(propertyChange.getName());
       setVariables(propertyChange);
-      exp.setValue(evaluationContext, propertyChange.getValue());
+      if (exp.isWritable(evaluationContext)) {
+         exp.setValue(evaluationContext, propertyChange.getValue());
+      } else {
+         exp.getValue(evaluationContext);
+      }
    }
 
    private void setVariables(PropertyChange propertyChange) {
@@ -36,6 +41,8 @@ public class PropertyChangeExecutor {
       }
       if (variables.size() > 0) {
          evaluationContext.setVariables(variables);
+      } else {
+         evaluationContext.setVariables(Collections.<String, Object>emptyMap());
       }
    }
 }
