@@ -59,8 +59,8 @@ public class ObservableListTest {
       strings.remove(1);
 
       assertThat(change, not(nullValue()));
-      assertThat(change.getName(), equalTo("listWithStrings.remove(1)"));
-      assertThat((String) change.getValue(), equalTo("value2"));
+      assertThat(change.getName(), equalTo("listWithStrings.remove(#arg0)"));
+      assertThat((Integer) change.getArg(0), equalTo(1));
 
       change = null;
       Iterator<String> iterator = strings.iterator();
@@ -68,8 +68,8 @@ public class ObservableListTest {
       iterator.remove();
 
       assertThat(change, not(nullValue()));
-      assertThat(change.getName(), equalTo("listWithStrings.remove(0)"));
-      assertThat((String) change.getValue(), equalTo("value1"));
+      assertThat(change.getName(), equalTo("listWithStrings.remove(#arg0)"));
+      assertThat((Integer) change.getArg(0), equalTo(0));
    }
 
    @Test

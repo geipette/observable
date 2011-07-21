@@ -76,7 +76,6 @@ public class ObservableMapTest {
       assertThat(change, not(nullValue()));
       assertThat(change.getName(), equalTo("mapWithStrings.remove(#arg0)"));
       assertThat((String) change.getArg(0), equalTo("key1"));
-      assertThat((String) change.getValue(), equalTo("value1"));
 
    }
 
@@ -94,7 +93,6 @@ public class ObservableMapTest {
       assertThat(change, not(nullValue()));
       assertThat(change.getName(), equalTo("mapWithStrings.remove(#arg0)"));
       assertThat((String) change.getArg(0), equalTo("key3"));
-      assertThat((String) change.getValue(), equalTo("value3"));
    }
 
 
@@ -110,7 +108,6 @@ public class ObservableMapTest {
       assertThat(change, not(nullValue()));
       assertThat(change.getName(), equalTo("mapWithStrings.remove(#arg0)"));
       assertThat((String) change.getArg(0), equalTo("key2"));
-      assertThat((String) change.getValue(), equalTo("value2"));
    }
 
    @Test
@@ -126,7 +123,6 @@ public class ObservableMapTest {
       assertThat(change, not(nullValue()));
       assertThat(change.getName(), equalTo("mapWithStrings.remove(#arg0)"));
       assertThat((String) change.getArg(0), equalTo("key1"));
-      assertThat((String) change.getValue(), equalTo("value1"));
    }
 
    @Test

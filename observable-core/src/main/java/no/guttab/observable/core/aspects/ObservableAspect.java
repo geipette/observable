@@ -36,9 +36,9 @@ public class ObservableAspect {
    public void setFieldOnObservableAdvice(JoinPoint jp, Subject subject) throws Throwable {
       if (jp.getArgs().length == 1) {
          final String propertyName = jp.getSignature().getName();
-         final Object arg = jp.getArgs()[0];
-         log.debug("Field '{}' was set to '{}'", propertyName, arg);
-         subject.notifyListeners(new PropertyChange(propertyName, arg));
+         final Object value = jp.getArgs()[0];
+         log.debug("Field '{}' was set to '{}'", propertyName, value);
+         subject.notifyListeners(new PropertyChange(propertyName, value));
       }
    }
 
@@ -47,9 +47,9 @@ public class ObservableAspect {
    public void setObservedFieldOnObservableAdvice(JoinPoint jp, Subject subject) throws Throwable {
       if (jp.getArgs().length == 1) {
          final String propertyName = jp.getSignature().getName();
-         final Subject arg = (Subject) jp.getArgs()[0];
-         arg.addListener(new SubjectListener(propertyName, subject));
-         subject.notifyListeners(new PropertyChange(propertyName, arg));
+         final Subject value = (Subject) jp.getArgs()[0];
+         value.addListener(new SubjectListener(propertyName, subject));
+         subject.notifyListeners(new PropertyChange(propertyName, value));
       }
    }
 

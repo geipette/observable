@@ -7,14 +7,16 @@ import java.util.List;
 
 public class PropertyChange {
    private String name;
-   private List<?> values = new ArrayList<Object>();
+   private Object value;
+   private List<?> arguments = new ArrayList<Object>();
 
-   public PropertyChange(String name, Object... values) {
+   public PropertyChange(String name, Object value, Object... arguments) {
       this.name = name;
-      if (values != null) {
-         this.values = Arrays.asList(values);
+      this.value = value;
+      if (arguments != null) {
+         this.arguments = Arrays.asList(arguments);
       } else {
-         this.values = Collections.emptyList();
+         this.arguments = Collections.emptyList();
       }
    }
 
@@ -22,33 +24,24 @@ public class PropertyChange {
       return name;
    }
 
-   public void setName(String name) {
-      this.name = name;
-   }
-
    public Object getValue() {
-      if (getArgCount() < 0) {
-         return null;
-      }
-      return getArg(getArgCount());
+      return value;
    }
 
    public Object getArg(int argNum) {
-      return values.get(argNum);
+      return arguments.get(argNum);
    }
 
    public int getArgCount() {
-      return values.size() - 1;
+      return arguments.size();
    }
 
    @Override
    public String toString() {
-      final StringBuilder sb = new StringBuilder();
-      sb.append("PropertyChange");
-      sb.append("{name='").append(name).append('\'');
-      sb.append(", values=").append(values);
-      sb.append('}');
-      return sb.toString();
+      return "PropertyChange{" +
+            "name='" + name + '\'' +
+            ", value=" + value +
+            ", arguments=" + arguments +
+            '}';
    }
-
 }

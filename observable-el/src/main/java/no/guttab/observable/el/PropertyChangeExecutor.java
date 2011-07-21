@@ -2,6 +2,7 @@ package no.guttab.observable.el;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import no.guttab.observable.core.PropertyChange;
@@ -20,6 +21,7 @@ public class PropertyChangeExecutor {
 
    public PropertyChangeExecutor(Object model) {
       this.evaluationContext = new StandardEvaluationContext(model);
+      evaluationContext.addMethodResolver(new OneIntArgMethodResolver(List.class, "remove"));
    }
 
    public void execute(PropertyChange propertyChange) {

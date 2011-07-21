@@ -41,7 +41,7 @@ public class SubjectListListener<T> implements ObservableListListener<T> {
          removeElementChangedListener(oldElement);
          // TODO: OldElement supplied twice as a quick fix, PropertyChange does not support one arg and no value.
          // TODO: Should be able to use index instead
-         subject.notifyListeners(new PropertyChange(listId + ".remove(#arg0)", oldElement, oldElement));
+         subject.notifyListeners(new PropertyChange(listId + ".remove(#arg0)", null, index));
       }
    }
 

@@ -26,13 +26,13 @@ public class SubjectSetListener<T> implements ObservableSetListener<T> {
    @Override
    public void setElementsRemoved(ObservableSet<T> set, T oldElement) {
       removeElementListener(oldElement);
-      subject.notifyListeners(new PropertyChange(getSetId(set) + ".remove(#arg0)", oldElement));
+      subject.notifyListeners(new PropertyChange(getSetId(set) + ".remove(#arg0)", null, oldElement));
    }
 
    @Override
    public void setElementPropertyChanged(ObservableSet<T> set, T element, PropertyChange propertyChange) {
       subject.notifyListeners(new PropertyChange(getSetId(set) + "[#arg0]." + propertyChange.getName(),
-            element, propertyChange.getValue()));
+            propertyChange.getValue(), element));
    }
 
    private void removeElementListener(T value) {
