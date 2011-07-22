@@ -154,7 +154,6 @@ public class ObservableListTest {
          }
       });
       List<String> list1 = observableTypeWithList.getListWithStrings();
-      List<String> list2 = observableTypeWithList.getListWithStrings();
 
       list1.add("test");
       assertThat(changeCount[0], equalTo(1));

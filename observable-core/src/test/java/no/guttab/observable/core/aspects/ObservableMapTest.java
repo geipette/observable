@@ -9,6 +9,7 @@ import no.guttab.observable.core.PropertyChangeListener;
 import no.guttab.observable.core.Subject;
 import no.guttab.observable.core.annotation.Observable;
 import no.guttab.observable.core.annotation.ObservableCollection;
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -183,6 +184,22 @@ public class ObservableMapTest {
       value3.setSimpleProperty("value3changed");
       assertThat(change, nullValue());
    }
+
+   @Test
+   public void multipleAccessesOfList_ShouldNotAffectChangeCallCount() {
+      final int[] changeCount = new int[]{0};
+      ((Subject) observableTypeWithMap).addListener(new PropertyChangeListener() {
+         @Override
+         public void notifyChange(PropertyChange change) {
+            changeCount[0]++;
+         }
+      });
+      Map<String, String> map1 = observableTypeWithMap.getMapWithStrings();
+
+      map1.put("key", "value");
+      assertThat(changeCount[0], CoreMatchers.equalTo(1));
+   }
+
 
    private void addChangeListenerFor(Object observableForTesting) {
       ((Subject) observableForTesting).addListener(new PropertyChangeListener() {
